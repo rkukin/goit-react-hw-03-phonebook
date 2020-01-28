@@ -20,12 +20,22 @@ export default class App extends Component{
   handleSubmit = (e) => {
     console.log(e.target);
     e.preventDefault();
-    const { name, number } = this.state;
+    const { name, number, contacts } = this.state;
 
-    this.setState(prevState => ({
-      contacts: [...prevState.contacts, {id: uuid(), name: name, number: number}]
-    }));
-    this.setState({name: "", number: ""});
+    if (name === "" || number === "") {
+      alert("Please fill all fields!")
+    }
+    else if (contacts.find(element =>(element.name.toLowerCase() === name.toLowerCase()))) {
+      alert("This contact already added!")
+    }
+    else {
+      this.setState(prevState => ({
+        contacts: [...prevState.contacts, {id: uuid(), name: name, number: number}]
+      }));
+      this.setState({name: "", number: ""});
+    }
+
+
   };
 
   //TODO
@@ -36,9 +46,21 @@ export default class App extends Component{
   };
 
   handleDelete = (e) => {
-    console.log(e)
-    console.log(e.target)
   };
+
+  list (){
+    const { contacts, filter } = this.state;
+    if (filter ==="") {
+      return contacts.map(contact => (
+          <li key={contact.id}>{contact.name}: {contact.number} <button onClick={this.handleDelete}>Delete</button></li>
+        ))
+    } else if (contacts.find(element =>(
+        element.name.toLowerCase().indexOf(filter.toLowerCase())>=0))) {
+      return <p>MATCH!</p>
+    } else {
+      return null
+    }
+  }
 
 
   render(){
@@ -62,12 +84,14 @@ export default class App extends Component{
           </div>
         </form>
           <h3>Contacts</h3>
-          <input type="text" value={filter} onChange={this.handleSearch} name="filter" autoComplete='off'/>
+          <input type="text" value={filter} onChange={this.handleChange} name="filter" autoComplete='off'/>
           <ul>
 
-            {contacts.map(contact => (
-                <li key={contact.id}>{contact.name}: {contact.number} <button onClick={this.handleDelete}>Delete</button></li>
-              ))}
+            {/*{contacts.map(contact => (*/}
+            {/*    <li key={contact.id}>{contact.name}: {contact.number} <button onClick={this.handleDelete}>Delete</button></li>*/}
+            {/*  ))}*/}
+
+            {this.list()}
 
           </ul>
 
