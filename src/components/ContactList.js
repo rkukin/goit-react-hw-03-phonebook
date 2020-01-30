@@ -19,5 +19,5 @@ export default function ContactList({children}) {
 }
 
 ContactList.propTypes = {
-  children: PropTypes.object.isRequired
-}
+  children: PropTypes.array.isRequired
+};
