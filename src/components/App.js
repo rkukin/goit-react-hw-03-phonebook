@@ -2,13 +2,15 @@ import React, {Component} from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { uuid } from 'uuidv4';
+import AddContactForm from "./AddContactForm";
+import ContactListItem from "./ContactListItem";
+import ContactList from "./ContactList";
+import Filter from "./Filter";
 
 export default class App extends Component {
 
   state = {
     contacts: [],
-    name: '',
-    number: '',
     filter: ''
   };
 
@@ -19,7 +21,11 @@ export default class App extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const { name, number, contacts } = this.state;
+    const form = e.target;
+    const name = form.querySelector('[name=\'name\']').value;
+    const number = form.querySelector('[name=\'number\']').value;
+
+    const { contacts } = this.state;
 
     if (name === "" || number === "") {
       alert("Please fill all fields!")
@@ -32,70 +38,44 @@ export default class App extends Component {
         contacts: [...prevState.contacts, {id: uuid(), name: name, number: number}]
       }));
       this.setState({name: "", number: ""});
+      form.reset();
     }
   };
 
-  handleDelete = ( contactId) => {
+  handleDelete = ( contactId ) => {
     const { contacts } = this.state;
-
     const newContacts = contacts.filter(contact => contact.id !== contactId);
-
     this.setState({contacts: newContacts});
   };
 
-  renderItems = (contacts) => {
-    return contacts.map(contact => (
-        <li key={contact.id}><p>{contact.name}: {contact.number}</p> <button onClick={() => this.handleDelete(contact.id)}>Delete</button></li>
-    ));
-  };
-
-  renderContactsList (){
+  getFilteredContacts (){
     const { contacts, filter } = this.state;
     const filteredResults = contacts.filter(contact => contact.name.toLowerCase().indexOf(filter.toLowerCase()) !== -1 );
-
-
     if (filter === "") {
-      return this.renderItems(contacts);
+      return contacts;
     }
-
     if (filteredResults.length) {
-      return this.renderItems(filteredResults);
+      return filteredResults;
     }
-
-    return null;
+    return [];
   }
 
 
   render(){
-    const { name, number, filter} = this.state;
-
     return (
       <>
       <h2>PhoneBook</h2>
-        <form onSubmit={this.handleSubmit}>
-          <h3>Name</h3>
-            <input type="text" value={name} onChange={this.handleChange} name="name" autoComplete='off'/>
-
-          <h3>Number</h3>
-            <input type="tel" value={number} onChange={this.handleChange} name="number" autoComplete='off'/>
-
-          <div>
-            <button type="submit">Add contact</button>
-          </div>
-        </form>
+        <AddContactForm handleSubmit={this.handleSubmit} />
           <h3>Contacts</h3>
-          <input type="text" value={filter} onChange={this.handleChange} name="filter" autoComplete='off'/>
-          <ul>
-
-            {this.renderContactsList()}
-
-          </ul>
-
+          <Filter handleChange={this.handleChange}/>
+          <ContactList>
+            {this.getFilteredContacts().map(contact => {
+              return <ContactListItem key = {contact.id} contact={contact} handleDelete={this.handleDelete}/>
+            })}
+          </ContactList>
       </>
     )
   }
-
-
 }
 
 App.propTypes = {
