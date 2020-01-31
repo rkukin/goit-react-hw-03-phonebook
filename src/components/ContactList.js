@@ -5,7 +5,7 @@ import styled from "styled-components";
 const List = styled.ul`
 max-width: 400px;
 display: flex;
-flex-direction: row;
+flex-direction: column;
 `;
 
 

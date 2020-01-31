@@ -12,14 +12,19 @@ max-width: 50%;
 border-radius: 5px;
 `;
 
+const ContactListItemWrapper = styled.div`
+display: flex;
+margin-bottom: 10px;
+`;
+
 
 export default function ContactListItem({handleDelete, contact: {id, name, number}}) {
 
   return (
-    <>
-      <ListItem key={id}>{name}: {number} </ListItem><DeleteButton
-      onClick={() => handleDelete(id)}>Delete</DeleteButton>
-    </>
+    <ContactListItemWrapper>
+      <ListItem key={id}>{name}: {number} </ListItem>
+      <DeleteButton onClick={() => handleDelete(id)}>Delete</DeleteButton>
+    </ContactListItemWrapper>
   )
 }
 
