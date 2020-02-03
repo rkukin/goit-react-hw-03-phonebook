@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types"
 import styled from "styled-components";
+import ContactListItem from "./ContactListItem";
 
 const List = styled.ul`
 max-width: 400px;
@@ -8,16 +9,18 @@ display: flex;
 flex-direction: column;
 `;
 
-
-export default function ContactList({children}) {
+export default function ContactList({contacts, handleDelete}) {
 
   return (
     <List>
-      {children}
+      {contacts.map(contact => {
+        return <ContactListItem key={contact.id} contact={contact} handleDelete={handleDelete}/>
+      })}
     </List>
   )
 }
 
 ContactList.propTypes = {
-  children: PropTypes.array.isRequired
+  contacts: PropTypes.array.isRequired,
+  handleDelete: PropTypes.func.isRequired
 };

@@ -8,13 +8,13 @@ margin-top: 10px;
 margin-bottom: 30px;
 `;
 
-export default function Filter ({handleChange}) {
+export default function Filter({handleChange}) {
 
-    return (
-        <FilterInput type="text" onChange={handleChange} name="filter" autoComplete='off'/>
-    )
+  return (
+    <FilterInput type="text" onChange={handleChange} name="filter" autoComplete='off'/>
+  )
 }
 
 Filter.propTypes = {
-    handleChange: PropTypes.func.isRequired
+  handleChange: PropTypes.func.isRequired
 };
