@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 const ListItem = styled.li`
 margin-right: 30px;
-max-width: 50%;
+min-width: 50%;
 `;
 
 const DeleteButton = styled.button`
